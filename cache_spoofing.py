@@ -2,7 +2,7 @@ import netfilterqueue
 import scapy.all as scapy
 
 def process_packet(packet):
-    scapy_packet = scapy.IP(packet.get_payload()):
+    scapy_packet = scapy.IP(packet.get_payload())
     if scapy_packet.haslayer(scapy.DNSRR):
         qname = scapy_packet[scapy.DNSRR].qname
         if "www.facebook.com" in qname:

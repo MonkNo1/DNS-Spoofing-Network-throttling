@@ -50,8 +50,8 @@ def spoof(target_ip,spoof_ip):
 def start():
     count = 0 
     while True:
-        spoof("192.168.1.6","192.168.1.1")
-        spoof("192.168.1.1","192.168.1.6")
+        spoof("192.168.1.4","192.168.1.1")
+        spoof("192.168.1.1","192.168.1.4")
         print("Packet Counts : ",count)
         count = count + 1
         time.sleep(2)

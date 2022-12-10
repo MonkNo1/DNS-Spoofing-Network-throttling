@@ -47,7 +47,7 @@ def start():
         count = count + 1
         time.sleep(2)
 
-def stop():
+def stop(hostIp,gateIp):
     restore(hostIp,gateIp)#restore(target ip , router ip )
 
 def spoint(gates,hosts,flg):  

@@ -5,19 +5,20 @@ import arp
 
 #Network Throtttling 
 def thrstart():
+    print(a,b,c)
     NetworkThrottling.thpoint(a,b,1)
 
 def thrstop():
     NetworkThrottling.thpoint(a,b,3)
 
 def thrreset():
-    NetworkThrottling.stop(a,b,1)
+    NetworkThrottling.stop(a,b)
 
 #ARP spoofing
 def arpstart():
     arp.spoint(a,b,1)
 
-def arpstart():
+def arpstop():
     arp.spoint(a,b,3)
 
 def arpreset():
@@ -52,24 +53,24 @@ e3.pack()
 
 t1=tk.Label(text="network throttling:")
 t1.pack()
-b1=tk.Button(text="Start") #commad = thr()
-b2=tk.Button(text="Stop")
-b3=tk.Button(text="Reset")
+b1=tk.Button(text="Start",command=thrstart) #commad = thr()
+b2=tk.Button(text="Stop",command=thrstop)
+b3=tk.Button(text="Reset",command=thrreset)
 b1.pack()
 b2.pack()
 b3.pack()
 t2=tk.Label(text="ARP Spoofing:")
 t2.pack()
-b4=tk.Button(text="Start")
-b5=tk.Button(text="Stop")
-b6=tk.Button(text="Reset")
+b4=tk.Button(text="Start",command=arpstart)
+b5=tk.Button(text="Stop",command=arpstop)
+b6=tk.Button(text="Reset",command=arpreset)
 b4.pack()
 b5.pack()
 b6.pack()
 t3=tk.Label(text="DNS Spoofing:")
 t3.pack()
-b7=tk.Button(text="Start")
-b8=tk.Button(text="Stop")
+b7=tk.Button(text="Start",command=dnsstart)
+b8=tk.Button(text="Stop",command=dnsstop)
 b7.pack()
 b8.pack()
 

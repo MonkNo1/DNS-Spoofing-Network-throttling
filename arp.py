@@ -2,20 +2,8 @@ from scapy.all import srp,send,ARP
 import scapy.all as scapy
 import time
 
-# def get_mac(ip):
-#     arp_request = scapy.ARP(pdst=ip)
-#     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
-#     arp_request_broadcast = broadcast/arp_request
-#     answered_list = scapy.srp(arp_request_broadcast,timeout=1,verbose=False)[0]
-
-#     # print(answered_list[0][1].hwsrc)
-#     return (answered_list[0][1].hwsrc)
-
-    # client_list = [0]
-    # for element in answered_list:
-    #     client_dict = {"ip":element[1].psrc,"mac":element[1].hwsrc}
-    #     client_list.append(client_dict)
-    # return client_list
+gateIp = ""
+hostIp = "" 
 
 def get_mac(ip):
     mac = "xx"
@@ -58,9 +46,10 @@ def start():
 def stop():
     restore("192.168.1.6","192.168.1.1")#restore(target ip , router ip )
 
-print("1.start \n 2. restore")
-n = int(input("enter ur value : "))
-if n == 1 : 
-    start()
-else : 
-    stop()
+def spoint():   
+    print("1.start \n 2. restore")
+    n = int(input("enter ur value : "))
+    if n == 1 : 
+        start()
+    else : 
+        stop()

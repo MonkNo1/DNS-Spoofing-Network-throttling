@@ -1,4 +1,11 @@
 import tkinter as tk
+import cache
+import arp
+
+def thr():
+    a = e1.get()
+    cache.DnsSnoof()
+
 win=tk.Tk()
 l1=tk.Label(text="SASTRA UNIVERSITY")
 l1.pack()
@@ -9,14 +16,22 @@ k1.pack()
 e1=tk.Entry()
 e1.pack()
 
+# a = e1.get()
+
 k2=tk.Label(text="GateWay")
 k2.pack()
 e2=tk.Entry()
 e2.pack()
 
+k2=tk.Label(text="SpoofIP")
+k2.pack()
+e2=tk.Entry()
+e2.pack()
+
+
 t1=tk.Label(text="network throttling:")
 t1.pack()
-b1=tk.Button(text="Start")
+b1=tk.Button(text="Start") #commad = thr()
 b2=tk.Button(text="Stop")
 b1.pack()
 b2.pack()
@@ -32,6 +47,7 @@ b5=tk.Button(text="Start")
 b6=tk.Button(text="Stop")
 b5.pack()
 b6.pack()
+
 
 name=tk.Label(text="R.Chandrakumar")
 name.pack()

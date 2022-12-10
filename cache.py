@@ -3,6 +3,8 @@ import logging as log
 from scapy.all import IP, DNSRR, DNS, UDP, DNSQR
 from netfilterqueue import NetfilterQueue
 
+flg = 0
+dnsSpoof = ""
 
 class DnsSnoof:
 	def __init__(self, hostDict, queueNum):
@@ -45,7 +47,7 @@ class DnsSnoof:
 		return packet.accept()
 
 
-if __name__ == '__main__':
+def dnsspoint():
 	try:
 		hostDict = {
 			b"google.com.": "192.168.1.9",

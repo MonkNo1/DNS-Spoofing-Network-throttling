@@ -1,5 +1,3 @@
-"# DNS-Spoofing-Network-throttling" 
-
 For Arp Spoofing :
 Basic Installization are scapy :
 ```

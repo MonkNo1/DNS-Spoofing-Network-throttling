@@ -14,6 +14,12 @@ Then Run Arp spoof bye :
 ```
 sudo python arp_spoof.py
 ```
+
+for Running DNS spoofing :
+
+We need NetFilterqueue: 
+
+For Installization
 Installaztion of  NetFiltersQueue : ```https://github.com/johnteslade/python-netfilterqueue```
 ```
 apt-get install build-essential python-dev libnetfilter-queue-dev
@@ -26,3 +32,5 @@ git clone https://github.com/oremanj/python-netfilterqueue
 cd python-netfilterqueue
 pip install .
 ```
+
+
